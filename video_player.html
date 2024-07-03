@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Overlay</title>
+    <style>
+        #main-video {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+        }
+
+        #main-player {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #overlay-video {
+            position: absolute;
+            top: 10px; /* Distance from top */
+            right: 10px; /* Distance from right */
+            width: 30%; /* Adjust the width as needed */
+            padding-bottom: 16.67%; /* Aspect ratio to ensure it fits well */
+            height: 0;
+            background-color: transparent; /* Transparent background */
+        }
+
+        #overlay-player {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="main-video">
+        <video id="main-player" controls>
+            <source src="FY24 YM NOL NFL HOCPR ENG ESP CC.mp4" type="video/mp4">
+        </video>
+        <div id="overlay-video">
+            <video id="overlay-player">
+                <source src="video.mov" type="video/webm">
+            </video>
+        </div>
+    </div>
+
+    <script>
+        const mainPlayer = document.getElementById('main-player');
+        const overlayPlayer = document.getElementById('overlay-player');
+        const overlayDelay = 39.5; // Seconds until the overlay video starts
+        const overlayFadeInDuration = 0.5; // Duration of fade-in in seconds
+
+        function updateOverlayVideo() {
+            const currentTime = mainPlayer.currentTime;
+            const overlayStartTime = overlayDelay;
+            const overlayEndTime = overlayStartTime + overlayFadeInDuration;
+
+            if (currentTime < overlayStartTime) {
+                overlayPlayer.style.display = 'none';
+                overlayPlayer.pause();
+            } else if (currentTime < overlayEndTime) {
+                overlayPlayer.style.display = 'block';
+                overlayPlayer.currentTime = 0;
+                overlayPlayer.pause();
+            } else {
+                overlayPlayer.style.display = 'block';
+                overlayPlayer.currentTime = currentTime - overlayDelay;
+                if (mainPlayer.paused) {
+                    overlayPlayer.pause();
+                } else {
+                    overlayPlayer.play();
+                }
+            }
+        }
+
+        mainPlayer.addEventListener('loadedmetadata', () => {
+            updateOverlayVideo();
+        });
+
+        mainPlayer.addEventListener('timeupdate', () => {
+            updateOverlayVideo();
+        });
+
+        mainPlayer.addEventListener('pause', () => {
+            overlayPlayer.pause();
+        });
+
+        mainPlayer.addEventListener('play', () => {
+            updateOverlayVideo();
+        });
+    </script>
+</body>
+</html>
