@@ -63,3 +63,5 @@ lora model Cartoon portrait: https://civitai.com/api/download/models/120882
 if stable diffusion/webui/models/Stable-diffusion/v1-5-pruned-emaonly.safetensors dose no already exist download it from:
 https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.safetensors?download=true
 
+
+in img_to_libsync_cpr/run.py line 50 is the IPA key for www.cutout.pro. This should be repalced with a paid one.
